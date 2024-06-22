@@ -163,6 +163,10 @@ export class Egg {
     if (eggOptions.species) {
       this._tier = this.getEggTierFromSpeciesStarterValue();
       this._hatchWaves = eggOptions.hatchWaves ?? this.getEggTierDefaultHatchWaves();
+      // If species has no variant, set variantTier to common
+      if (!getPokemonSpecies(this.species).hasVariants()) {
+        this._variantTier = VariantTier.COMMON;
+      }
     }
     if (eggOptions.pulled) {
       this.addEggToGameData(eggOptions.scene);
@@ -175,7 +179,7 @@ export class Egg {
 
   public isManaphyEgg(): boolean {
     return (this._species === Species.PHIONE || this._species === Species.MANAPHY) ||
-       this._tier === EggTier.COMMON && !(this._id % 204);
+       this._tier === EggTier.COMMON && !(this._id % 204) && !this._species;
   }
 
   public getKey(): string {
